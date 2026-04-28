@@ -1,92 +1,108 @@
 CREATE TABLE tournament (
-	tournament_game_id SERIAL,
-	ranking INT NOT NULL,
-	tournament_game_loc VARCHAR(50) NOT NULL,
-	year INT NOT NULL,
-	team_id SERIAL NOT NULL,
-	conference_id SERIAL NOT NULL,
-	round INT NOT NULL,
+	tournament_id SERIAL,
+	year INT NOT NULL UNIQUE,
 	CONSTRAINT tournament_key 
-		PRIMARY KEY (tournament_game_id),
-	CONSTRAINT fk_conference
-		FOREIGN KEY (conference_id)
-        REFERENCES conference(conference_id),
-	CONSTRAINT fk_team
-		FOREIGN KEY (team_id)
-        REFERENCES team(team_id),
-	CONSTRAINT chk_ranking
-        CHECK (ranking BETWEEN 1 AND 16),
-	CONSTRAINT chk_round
-		CHECK (round BETWEEN 1 AND 64),
+		PRIMARY KEY (tournament_id),
 	CONSTRAINT chk_year
 		CHECK (year BETWEEN 2008 AND 2026)
 	
 ); 
-
-CREATE INDEX idx_pt_tournament
-    ON tournament(tournamant_game_id);
 	
 CREATE TABLE conference (
 	conference_id SERIAL,
-	conference_name VARCHAR(50),
-	tournament_games INT,
-	tournament_win INT,
-	tournament_loss INT,
-	round_64 INT,
-	round_32 INT, 
-	sweet_16 INT,
-	elite_8 INT,
-	final_4 INT,
-	final_2 INT, 
-	champ INT,
+	conference_name VARCHAR(50) UNIQUE NOT NULL,
+	
 	CONSTRAINT conference_key 
-		PRIMARY KEY (conference_id),
-	CONSTRAINT chk_tournament_games
-        CHECK (tournament_games BETWEEN 0 AND 100),
-	CONSTRAINT chk_tournament_win
-        CHECK (tournament_win BETWEEN 0 AND 100),
-	CONSTRAINT chk_tournament_loss
-        CHECK (tournament_loss BETWEEN 0 AND 100),
-	CONSTRAINT chk_round_64
-        CHECK (round_64 BETWEEN 0 AND 100),
-	CONSTRAINT chk_round_32
-        CHECK (round_32 BETWEEN 0 AND 100),
-	CONSTRAINT chk_sweet_16
-        CHECK (sweet_16 BETWEEN 0 AND 100),
-	CONSTRAINT chk_elite_8
-        CHECK (ranking BETWEEN 0 AND 100),
-	CONSTRAINT chk_final_4
-        CHECK (final_4 BETWEEN 0 AND 100),
-	CONSTRAINT chk_final_2
-        CHECK (final_2 BETWEEN 0 AND 100),
-	CONSTRAINT chk_champ
-        CHECK (champ BETWEEN 0 AND 100)
-		
+		PRIMARY KEY (conference_id)
 );
-CREATE INDEX idx_pt_conference
-    ON conference(conference_id);
+
 
 CREATE TABLE upset (
-	upset_id SERIAL,
-	upset_year INT,
-	round INT,
-	seed_won INT,
-	seed_lost INT,
-	seed_diff INT,
-	CONSTRAINT upset_key 
-		PRIMARY KEY (upset_id),
-	CONSTRAINT chk_upset_year
-        CHECK (upset_year BETWEEN 0 AND 100)
-	CONSTRAINT chk_round
-        CHECK (round BETWEEN 0 AND 100)
-	CONSTRAINT chk_seed_won
-        CHECK (seed_won BETWEEN 0 AND 100)
-	CONSTRAINT chk_seed_lost
-        CHECK (seed_lost BETWEEN 0 AND 100)
-	CONSTRAINT chk_seed_diff
-        CHECK (seed_diff BETWEEN 0 AND 100)
+    upset_id SERIAL PRIMARY KEY,
+    upset_year INT,
+    round INT,
+    seed_won INT,
+    seed_lost INT,
+    seed_diff INT,
+
+    CONSTRAINT chk_year
+        CHECK (upset_year BETWEEN 2008 AND 2026),
+
+    CONSTRAINT chk_round
+        CHECK (round BETWEEN 0 AND 64),
+		
+    CONSTRAINT chk_seed_won
+        CHECK (seed_won BETWEEN 1 AND 16),
+
+    CONSTRAINT chk_seed_lost
+        CHECK (seed_lost BETWEEN 1 AND 16)
 );
-CREATE INDEX idx_pt_upset
-    ON upset(upset_id);
+
+
+	
+CREATE TABLE team_tournament_result (
+    team_id INT,
+    tournament_id INT,
+    round_reached INT,
+    seed INT,
+    PRIMARY KEY (team_id, tournament_id),
+	
+	CONSTRAINT fk_ttr_team
+        FOREIGN KEY (team_id)
+        REFERENCES team(team_id),
+
+    CONSTRAINT fk_ttr_tournament
+        FOREIGN KEY (tournament_id)
+        REFERENCES tournament(tournament_id)
+);
+
+CREATE TABLE conference_tournament_stats (
+    conference_id INT NOT NULL,
+	tournament_id INT NOT NULL,
+    year INT NOT NULL,
+
+    tournament_games INT DEFAULT 0,
+    tournament_wins INT DEFAULT 0,
+    tournament_losses INT DEFAULT 0,
+
+    round_64 INT DEFAULT 0,
+    round_32 INT DEFAULT 0,
+    sweet_16 INT DEFAULT 0,
+    elite_8 INT DEFAULT 0,
+    final_4 INT DEFAULT 0,
+    final_2 INT DEFAULT 0,
+    champion INT DEFAULT 0,
+
+    PRIMARY KEY (conference_id, year),
+
+    CONSTRAINT fk_conf_stats
+        FOREIGN KEY (conference_id)
+        REFERENCES conference(conference_id),
+
+     CONSTRAINT fk_tournment_id
+        FOREIGN KEY (tournament_id)
+        REFERENCES tournament(tournament_id)
+);
+
+
+
+CREATE UNIQUE INDEX idx_tournament_year
+ON tournament(year);
+
+CREATE INDEX idx_ttr_team
+ON team_tournament_result(team_id);
+
+CREATE INDEX idx_ttr_tournament
+ON team_tournament_result(tournament_id);
+
+CREATE INDEX idx_ttr_team_year
+ON team_tournament_result(team_id, tournament_id);
+
+
+CREATE INDEX idx_conf_stats_conf_year
+ON conference_tournament_stats(conference_id, tournament_id);
+
+CREATE INDEX idx_upset_year
+ON upset(upset_year);
 
 
