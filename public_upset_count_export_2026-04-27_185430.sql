@@ -1,0 +1,17 @@
+insert into "upset_count" ("round", "upset_count", "year") values (NULL, NULL, 2025);
+insert into "upset_count" ("round", "upset_count", "year") values (NULL, NULL, 2024);
+insert into "upset_count" ("round", "upset_count", "year") values (NULL, NULL, 2023);
+insert into "upset_count" ("round", "upset_count", "year") values (NULL, NULL, 2022);
+insert into "upset_count" ("round", "upset_count", "year") values (NULL, NULL, 2021);
+insert into "upset_count" ("round", "upset_count", "year") values (NULL, NULL, 2019);
+insert into "upset_count" ("round", "upset_count", "year") values (NULL, NULL, 2018);
+insert into "upset_count" ("round", "upset_count", "year") values (NULL, NULL, 2017);
+insert into "upset_count" ("round", "upset_count", "year") values (NULL, NULL, 2016);
+insert into "upset_count" ("round", "upset_count", "year") values (NULL, NULL, 2015);
+insert into "upset_count" ("round", "upset_count", "year") values (NULL, NULL, 2014);
+insert into "upset_count" ("round", "upset_count", "year") values (NULL, NULL, 2013);
+insert into "upset_count" ("round", "upset_count", "year") values (NULL, NULL, 2012);
+insert into "upset_count" ("round", "upset_count", "year") values (NULL, NULL, 2011);
+insert into "upset_count" ("round", "upset_count", "year") values (NULL, NULL, 2010);
+insert into "upset_count" ("round", "upset_count", "year") values (NULL, NULL, 2009);
+insert into "upset_count" ("round", "upset_count", "year") values (NULL, NULL, 2008);
